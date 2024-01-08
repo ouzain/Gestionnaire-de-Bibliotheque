@@ -54,6 +54,17 @@ public class Gestionnaire {
         System.out.print("Choix: ");
     }
 
+    private static boolean doesLivreExist(String title, String autor){
+        boolean doesItemExist= false;
+        for (Livre item : livres){
+            if (item.getAuteur().equalsIgnoreCase(title)|| item.getAuteur().equalsIgnoreCase(autor)){
+                doesItemExist=true;
+                
+            }
+        }
+        return doesItemExist;
+    }
+
     private static void ajouterLivre() {
         System.out.print("Titre: ");
         String titre = scanner.nextLine();
@@ -61,13 +72,21 @@ public class Gestionnaire {
         String auteur = scanner.nextLine();
         System.out.print("Année de Publication: ");
         int anneePublication = scanner.nextInt();
-        int identifiant = livres.size() +1;
-        Livre livre = new Livre(titre, auteur, anneePublication, identifiant);
-        livres.add(livre);
-        System.out.println("Livre ajouté avec succès. Identifiant: " + identifiant);
+        if (doesLivreExist(titre, auteur)){
+            System.out.println("Ce livre existe déja dans votre bibliotheque !");
+        }
+        else{
+            int identifiant = livres.size() +1;
+            Livre livre = new Livre(titre, auteur, anneePublication, identifiant);
+            livres.add(livre);
+            System.out.println("Livre ajouté avec succès. Identifiant: " + identifiant);
+
+        }
+        
     }
 
     private static void supprimerLivre() {
+        boolean livreTrouve = false;
         System.out.print("Identifiant du livre à supprimer: ");
         int identifiant = scanner.nextInt();
         
@@ -77,10 +96,14 @@ public class Gestionnaire {
             if (livre.getIdentifiant() == identifiant) {
                 iterator.remove();
                 System.out.println("Livre supprimé avec succès.");
-                
+                livreTrouve= true;
             }
+           
         }
-        System.out.println("\nLivre non trouvé dans la bibliothèque.");
+        if (!livreTrouve) {
+            System.out.println("Le livre avec l'identifiant " + identifiant + " n'existe pas. Suppression annulée.");
+        }
+        
     }
 
     private static void rechercherLivre() {
@@ -95,8 +118,9 @@ public class Gestionnaire {
                     ", Année de Publication: " + livre.getAnneePublication() +
                     ", Identifiant: " + livre.getIdentifiant());
             }
+
             
-        } System.out.println("\nLivre non trouvé dans la bibliothèque.");
+        } //System.out.println("\nLivre non trouvé dans la bibliothèque.");
         
 
         
