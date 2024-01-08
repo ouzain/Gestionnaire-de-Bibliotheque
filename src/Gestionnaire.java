@@ -1,12 +1,14 @@
 
 //import java.util.InputMismatchException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Gestionnaire {
-    Bibliotheque bibliotheque = new Bibliotheque();
+    static ArrayList<Livre> livres = new ArrayList<>();
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Bibliotheque bibliotheque = new Bibliotheque();
+       
 
         while (true) {
             afficherMenu();
@@ -14,16 +16,16 @@ public class Gestionnaire {
 
             switch (choix) {
                 case 1:
-                    ajouterLivre(scanner, bibliotheque);
+                    ajouterLivre(scanner);
                     break;
                 case 2:
-                    supprimerLivre(scanner, bibliotheque);
+                    supprimerLivre(scanner);
                     break;
                 case 3:
-                    rechercherLivre(scanner, bibliotheque);
+                    rechercherLivre(scanner);
                     break;
                 case 4:
-                    bibliotheque.afficherLivres();
+                    afficherLivres();
                     break;
                 case 5:
                     System.out.println("Au revoir !");
@@ -44,42 +46,66 @@ public class Gestionnaire {
         System.out.print("Choix: ");
     }
 
-    private static void ajouterLivre(Scanner scanner, Bibliotheque bibliotheque) {
+    private static void ajouterLivre(Scanner scanner) {
         System.out.print("Titre: ");
         String titre = scanner.nextLine();
         System.out.print("Auteur: ");
         String auteur = scanner.nextLine();
         System.out.print("Année de Publication: ");
         int anneePublication = scanner.nextInt();
-        System.out.print("Identifiant: ");
-        int identifiant = scanner.nextInt();
-
-        //int identifiant = bibliotheque.afficherLivres().size() + 1;
+        int identifiant = livres.size() +1;
         Livre livre = new Livre(titre, auteur, anneePublication, identifiant);
-        bibliotheque.ajouterLivre(livre);
-
+        livres.add(livre);
         System.out.println("Livre ajouté avec succès. Identifiant: " + identifiant);
     }
 
-    private static void supprimerLivre(Scanner scanner, Bibliotheque bibliotheque) {
+    private static void supprimerLivre(Scanner scanner) {
         System.out.print("Identifiant du livre à supprimer: ");
         int identifiant = scanner.nextInt();
-        bibliotheque.supprimerLivre(identifiant);
+        
+        Iterator<Livre> iterator = livres.iterator();
+        while (iterator.hasNext()) {
+            Livre livre = iterator.next();
+            if (livre.getIdentifiant() == identifiant) {
+                iterator.remove();
+                System.out.println("Livre supprimé avec succès.");
+                
+            }
+        }
+        System.out.println("Livre non trouvé dans la bibliothèque.");
     }
 
-    private static void rechercherLivre(Scanner scanner, Bibliotheque bibliotheque) {
+    private static void rechercherLivre(Scanner scanner) {
         System.out.print("Identifiant du livre à rechercher: ");
         int identifiant = scanner.nextInt();
-        Livre livre = bibliotheque.rechercherLivre(identifiant);
-
-        if (livre != null) {
-            System.out.println("Livre trouvé:");
-            System.out.println("Titre: " + livre.getTitre() +
+        for (Livre livre : livres) {
+            if (livre.getIdentifiant() == identifiant) {
+                
+                 System.out.println("Livre trouvé:");
+                 System.out.println("Titre: " + livre.getTitre() +
                     ", Auteur: " + livre.getAuteur() +
                     ", Année de Publication: " + livre.getAnneePublication() +
                     ", Identifiant: " + livre.getIdentifiant());
+            }
+            else{
+                System.out.println("Livre non trouvé dans la bibliothèque.");
+            }
+        }
+        
+
+        
+    }
+
+    public static void afficherLivres() {
+        if (livres.isEmpty()) {
+            System.out.println("La bibliothèque est vide.");
         } else {
-            System.out.println("Livre non trouvé dans la bibliothèque.");
+            for (Livre livre : livres) {
+                System.out.println("Titre: " + livre.getTitre() +
+                        ", Auteur: " + livre.getAuteur() +
+                        ", Année de Publication: " + livre.getAnneePublication() +
+                        ", Identifiant: " + livre.getIdentifiant());
+            }
         }
     }
 }
