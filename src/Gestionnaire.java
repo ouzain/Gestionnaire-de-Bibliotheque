@@ -1,28 +1,28 @@
 
-//import java.util.InputMismatchException;
+import java.util.InputMismatchException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
 public class Gestionnaire {
     static ArrayList<Livre> livres = new ArrayList<>();
+    static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-       
-
+        
         while (true) {
-            afficherMenu();
-            int choix = scanner.nextInt();
-
-            switch (choix) {
+            try {
+                afficherMenu();
+                int choix = scanner.nextInt();
+                scanner.nextLine();
+                switch (choix) {
                 case 1:
-                    ajouterLivre(scanner);
+                    ajouterLivre();
                     break;
                 case 2:
-                    supprimerLivre(scanner);
+                    supprimerLivre();
                     break;
                 case 3:
-                    rechercherLivre(scanner);
+                    rechercherLivre();
                     break;
                 case 4:
                     afficherLivres();
@@ -31,8 +31,16 @@ public class Gestionnaire {
                     System.out.println("Au revoir !");
                     System.exit(0);
                 default:
-                    System.out.println("Choix invalide. Veuillez réessayer.");
+                    System.out.println("\nChoix invalide. Veuillez réessayer.");
             }
+                
+            } catch (InputMismatchException e) {
+                System.out.println("Veillez saisir un entier !");
+                break;
+            }
+            
+
+            
         }
     }
 
@@ -46,7 +54,7 @@ public class Gestionnaire {
         System.out.print("Choix: ");
     }
 
-    private static void ajouterLivre(Scanner scanner) {
+    private static void ajouterLivre() {
         System.out.print("Titre: ");
         String titre = scanner.nextLine();
         System.out.print("Auteur: ");
@@ -59,7 +67,7 @@ public class Gestionnaire {
         System.out.println("Livre ajouté avec succès. Identifiant: " + identifiant);
     }
 
-    private static void supprimerLivre(Scanner scanner) {
+    private static void supprimerLivre() {
         System.out.print("Identifiant du livre à supprimer: ");
         int identifiant = scanner.nextInt();
         
@@ -72,10 +80,10 @@ public class Gestionnaire {
                 
             }
         }
-        System.out.println("Livre non trouvé dans la bibliothèque.");
+        System.out.println("\nLivre non trouvé dans la bibliothèque.");
     }
 
-    private static void rechercherLivre(Scanner scanner) {
+    private static void rechercherLivre() {
         System.out.print("Identifiant du livre à rechercher: ");
         int identifiant = scanner.nextInt();
         for (Livre livre : livres) {
@@ -87,10 +95,8 @@ public class Gestionnaire {
                     ", Année de Publication: " + livre.getAnneePublication() +
                     ", Identifiant: " + livre.getIdentifiant());
             }
-            else{
-                System.out.println("Livre non trouvé dans la bibliothèque.");
-            }
-        }
+            
+        } System.out.println("\nLivre non trouvé dans la bibliothèque.");
         
 
         
@@ -98,7 +104,7 @@ public class Gestionnaire {
 
     public static void afficherLivres() {
         if (livres.isEmpty()) {
-            System.out.println("La bibliothèque est vide.");
+            System.out.println("\nLa bibliothèque est vide.");
         } else {
             for (Livre livre : livres) {
                 System.out.println("Titre: " + livre.getTitre() +
